@@ -13,10 +13,10 @@
 
 window.SITIO = {
   // Nombre del despacho, tal como aparece en Instagram.
-  nombre: "ORMAE | Arquitectura",
+  nombre: "ORMAE Arquitectura",
 
-  // Imagen protagonista de la portada. Mientras sea null, la portada muestra el monograma.
-  // Ejemplo: { src: "assets/portada.webp", alt: "Fachada principal al atardecer", ancho: 2400, alto: 1600 }
+  // La portada usa el video de assets/video/ (portada.mp4, portada.webm, portada-movil.mp4).
+  // Para cambiarlo, reemplaza esos archivos conservando los nombres.
   portada: null,
 
   // Texto de presentación del despacho (sección Estudio). Un párrafo por elemento.

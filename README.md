@@ -1,4 +1,4 @@
-# ORMAE | Arquitectura: guía de actualización del sitio
+# ORMAE Arquitectura: guía de actualización del sitio
 
 Sitio estático (HTML, CSS y JavaScript sin dependencias de compilación). Se puede publicar tal cual en cualquier hosting estático (Netlify, Vercel, GitHub Pages, Hostinger, etc.).
 
@@ -30,9 +30,9 @@ Cualquier campo vacío no se muestra. Los filtros por tipo, ubicación y año ap
 - **Secuencia de giro**: de 24 a 72 fotos consecutivas tomadas alrededor de una maqueta u objeto, mismo encuadre, en `secuencia: { alt, ancho, alto, frames: [...] }`. Se gira arrastrando, con las flechas o con el control deslizante.
 - Con fotografías normales no se simula una rotación: solo hay una inclinación discreta al pasar el puntero (se desactiva en pantallas táctiles y con "reducir movimiento").
 
-## Foto protagonista de la portada
+## Video de la portada
 
-En `SITIO.portada` pon `{ src, alt, ancho, alto }`. Mientras sea `null`, la portada muestra el monograma sobre su retícula de construcción.
+La portada usa `assets/video/portada.webm`, `portada.mp4` y `portada-movil.mp4` (con `portada-intro.jpg` y `portada-poster.jpg` como imágenes fijas). Los primeros 3,6 s son la intro del logotipo: se ven una vez y después el video repite solo el recorrido desde el segundo 4,2 (valores `INTRO_END` y `LOOP_FROM` en `js/site.js`). Para cambiar el video, reemplaza los archivos conservando los nombres; codifícalos con un fotograma clave por segundo para que el bucle salte sin cortes. Con "reducir movimiento" se muestra la imagen fija.
 
 ## Material pendiente
 

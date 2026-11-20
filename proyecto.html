@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Proyecto | ORMAE Arquitectura</title>
-  <meta name="description" content="Proyecto de ORMAE | Arquitectura. Arquitectura estratégica: planeación y desarrollo de proyectos en Valle de Toluca, CDMX y Edo. Méx.">
+  <meta name="description" content="Proyecto de ORMAE Arquitectura. Arquitectura estratégica: planeación y desarrollo de proyectos en Valle de Toluca, CDMX y Edo. Méx.">
   <meta name="theme-color" content="#1c1814">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="es_MX">
-  <meta property="og:title" content="ORMAE | Arquitectura">
-  <meta property="og:site_name" content="ORMAE | Arquitectura">
+  <meta property="og:title" content="ORMAE Arquitectura">
+  <meta property="og:site_name" content="ORMAE Arquitectura">
   <meta property="og:image" content="assets/brand/logo-600.png">
   <link rel="icon" type="image/png" sizes="64x64" href="assets/brand/favicon-64.png">
   <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
@@ -24,24 +24,31 @@
 
   <header class="nav" data-nav>
     <div class="nav__bar">
-      <a class="nav__mark" href="index.html" aria-label="ORMAE | Arquitectura, inicio">
+      <a class="nav__mark" href="index.html" aria-label="ORMAE Arquitectura, inicio">
         <img src="assets/brand/logo-600.png" width="40" height="40" alt="">
-        <span class="nav__name">ORMAE <span aria-hidden="true">|</span> Arquitectura</span>
+        <span class="nav__name wordmark"><span class="wordmark-main">ORMAE</span><span class="wordmark-sub">Arquitectura</span></span>
       </a>
       <nav class="nav__links" id="menu" aria-label="Principal">
-        <a href="index.html#proyectos">Proyectos</a>
-        <a href="index.html#servicios">Servicios</a>
-        <a href="index.html#estudio">Estudio</a>
-        <a href="index.html#contacto">Contacto</a>
+        <a href="index.html#proyectos" style="--i: 0">Proyectos</a>
+        <a href="index.html#servicios" style="--i: 1">Servicios</a>
+        <a href="index.html#estudio" style="--i: 2">Estudio</a>
+        <a href="index.html#contacto" style="--i: 3">Contacto</a>
+        <p class="nav__panel-foot">Valle de Toluca | CDMX | Edo. Méx.<br><a href="https://www.instagram.com/ormae_arquitectura/" rel="me noopener" target="_blank">Instagram @ormae_arquitectura</a></p>
       </nav>
-      <a class="nav__call" href="tel:7293318801">Llamar</a>
-      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>Menú</button>
+      <a class="nav__call" href="tel:7293318801" aria-label="Llamar al 729 331 8801">
+        <span class="nav__call-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+        <span class="nav__call-label">729 331 8801</span>
+      </a>
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>
+        <span class="nav__burger" aria-hidden="true"><i></i><i></i></span>
+        <span class="nav__toggle-label">Menú</span>
+      </button>
     </div>
   </header>
 
   <main id="main" class="project">
     <div class="container" data-project>
-      <a class="crumb" href="index.html#proyectos">Volver a proyectos</a>
+      <a class="crumb" href="index.html#proyectos"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg><span>Volver a proyectos</span></a>
       <noscript><p class="notice">Esta página necesita JavaScript para mostrar el proyecto. Número de contacto: <a href="tel:7293318801">729 331 8801</a>.</p></noscript>
     </div>
   </main>
@@ -62,7 +69,7 @@
 
   <footer class="footer" data-dark>
     <div class="container footer__grid">
-      <img class="footer__mark" src="assets/brand/logo-600.png" width="96" height="96" alt="Logotipo de ORMAE | Arquitectura">
+      <img class="footer__mark" src="assets/brand/logo-600.png" width="96" height="96" alt="Logotipo de ORMAE Arquitectura">
       <p class="footer__statement">Planeación y desarrollo de proyectos.</p>
       <div class="footer__contact">
         <a href="tel:7293318801">729 331 8801</a>
@@ -75,7 +82,7 @@
         <a href="index.html#estudio">Estudio</a>
         <a href="index.html#contacto">Contacto</a>
       </nav>
-      <p class="footer__legal"><small>© <span data-year>2026</span> ORMAE | Arquitectura.</small></p>
+      <p class="footer__legal"><small>© <span data-year>2026</span> ORMAE Arquitectura.</small></p>
     </div>
   </footer>
 

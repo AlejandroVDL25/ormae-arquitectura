@@ -22,7 +22,7 @@
   const nav = document.querySelector('[data-nav]');
   const toggle = document.querySelector('[data-menu-toggle]');
   if (nav && toggle) {
-    const set = (open) => { nav.toggleAttribute('data-open', open); toggle.setAttribute('aria-expanded', String(open)); toggle.textContent = open ? 'Cerrar' : 'Menú'; };
+    const set = (open) => { nav.toggleAttribute('data-open', open); toggle.setAttribute('aria-expanded', String(open)); toggle.querySelector('.nav__toggle-label').textContent = open ? 'Cerrar' : 'Menú'; document.documentElement.classList.toggle('menu-open', open); };
     toggle.addEventListener('click', () => set(!nav.hasAttribute('data-open')));
     nav.querySelectorAll('.nav__links a').forEach((a) => a.addEventListener('click', () => set(false)));
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && nav.hasAttribute('data-open')) { set(false); toggle.focus(); } });
@@ -37,7 +37,10 @@
       raf = requestAnimationFrame(() => {
         const y = nav.offsetHeight / 2;
         const sobre = oscuras.some((el) => { const r = el.getBoundingClientRect(); return r.top <= y && r.bottom > y; });
-        nav.classList.toggle('nav--dark', sobre);
+        const hero = document.querySelector('[data-hero]');
+        const clara = !!hero && hero.getBoundingClientRect().bottom > nav.offsetHeight * 2 && scrollY < 40;
+        nav.classList.toggle('nav--clear', clara);
+        nav.classList.toggle('nav--dark', sobre && !clara);
       });
     };
     addEventListener('scroll', tono, { passive: true });
@@ -72,44 +75,107 @@
   };
   document.querySelectorAll('[data-tilt]').forEach((el) => window.ARQ.tilt(el));
 
-  /* ---------- Monograma en capas: el puntero en toda la portada lo gira; el scroll separa las capas ---------- */
-  const heroEl = document.querySelector('[data-hero]'), plate = document.querySelector('[data-plate]');
-  if (heroEl && plate) {
-    let hover = 1, scroll = 0, raf = 0;
-    const sync = () => { plate.style.setProperty('--sep', Math.max(hover, 1 + scroll * 2.6).toFixed(3)); plate.style.setProperty('--scroll', scroll.toFixed(3)); };
-    window.ARQ.tilt(heroEl, {
-      target: plate, max: 10,
-      onMove: (x, y) => { hover = 1 + 1.4 * Math.min(1, Math.hypot(x - 0.5, y - 0.5) * 2 + 0.35); sync(); },
-      onLeave: () => { hover = 1; sync(); }
+  /* ---------- Portada en video: intro del logotipo, bucle del recorrido y plano en 3D ---------- */
+  const heroEl = document.querySelector('[data-hero]');
+  const video = document.querySelector('[data-hero-video]');
+  if (heroEl && video) {
+    const INTRO_END = 3.6;   // segundos de la intro del logotipo dentro del video
+    const LOOP_FROM = 4.2;   // el bucle repite solo el recorrido arquitectónico
+    const toggle = document.querySelector('[data-video-toggle]');
+    let pausedByUser = false;
+    const terminarIntro = () => heroEl.classList.remove('is-intro');
+    if (reduce.matches) {
+      video.removeAttribute('autoplay'); video.pause();
+    } else {
+      heroEl.classList.add('is-intro');
+      video.loop = false;
+      video.addEventListener('timeupdate', () => {
+        if (video.currentTime >= INTRO_END) terminarIntro();
+        if (toggle && isFinite(video.duration)) toggle.style.setProperty('--vp', (video.currentTime / video.duration).toFixed(3));
+        if (isFinite(video.duration) && video.currentTime >= video.duration - 0.35) video.currentTime = LOOP_FROM;
+      });
+      video.addEventListener('ended', () => {
+        video.addEventListener('seeked', () => video.play().catch(() => {}), { once: true });
+        video.currentTime = LOOP_FROM;
+      });
+      video.addEventListener('error', terminarIntro);
+      video.querySelector('source:last-of-type')?.addEventListener('error', terminarIntro);
+      // Si el navegador no reproduce automáticamente (ahorro de batería, datos), el texto aparece igual
+      setTimeout(() => { if (video.paused || video.currentTime < 0.2) terminarIntro(); }, 1400);
+      setTimeout(terminarIntro, 5000);
+    }
+    const sync = () => {
+      const playing = !video.paused;
+      if (toggle) { toggle.querySelector('.hero__toggle-label').textContent = playing ? 'Pausar video' : 'Reproducir video'; toggle.setAttribute('aria-pressed', String(!playing)); toggle.classList.toggle('is-paused', !playing); }
+    };
+    video.addEventListener('play', sync); video.addEventListener('pause', sync);
+    toggle?.addEventListener('click', () => {
+      if (video.paused) { pausedByUser = false; video.play().catch(() => {}); } else { pausedByUser = true; video.pause(); }
+      terminarIntro();
     });
-    const onScroll = () => {
+    // Se detiene fuera de pantalla para ahorrar batería
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([e]) => {
+        if (reduce.matches) return;
+        if (e.isIntersecting && !pausedByUser) video.play().catch(() => {});
+        else if (!e.isIntersecting) video.pause();
+      }, { threshold: 0.05 }).observe(heroEl);
+    }
+    // Puntero: el plano del video y el texto se desplazan en capas distintas
+    let raf = 0;
+    heroEl.addEventListener('pointermove', (e) => {
+      if (reduce.matches || !finePointer.matches || e.pointerType === 'touch') return;
+      const r = heroEl.getBoundingClientRect();
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
-        if (reduce.matches) { scroll = 0; sync(); return; }
-        scroll = Math.min(1, Math.max(0, scrollY / Math.max(1, heroEl.offsetHeight * 0.9)));
-        sync();
+        heroEl.classList.add('is-tilting');
+        heroEl.style.setProperty('--mx', ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
+        heroEl.style.setProperty('--my', ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
+      });
+    });
+    heroEl.addEventListener('pointerleave', () => { heroEl.classList.remove('is-tilting'); heroEl.style.setProperty('--mx', '0'); heroEl.style.setProperty('--my', '0'); });
+    // Scroll: el plano se inclina hacia atrás y se aleja
+    let rs = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(rs);
+      rs = requestAnimationFrame(() => {
+        const k = reduce.matches ? 0 : Math.min(1, Math.max(0, scrollY / Math.max(1, heroEl.offsetHeight)));
+        heroEl.style.setProperty('--hscroll', k.toFixed(3));
       });
     };
     addEventListener('scroll', onScroll, { passive: true });
     onScroll();
   }
 
-  document.querySelectorAll('[data-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
-
-  /* ---------- Portada: foto protagonista cuando exista ---------- */
-  const slot = document.querySelector('[data-slot="portada"]');
-  if (slot && SITIO.portada && SITIO.portada.src) {
-    const im = new Image();
-    im.src = SITIO.portada.src;
-    im.alt = SITIO.portada.alt || '';
-    im.width = SITIO.portada.ancho || 2400; im.height = SITIO.portada.alto || 1600;
-    im.fetchPriority = 'high';
-    im.addEventListener('error', () => { im.remove(); slot.removeAttribute('data-has-photo'); }, { once: true });
-    slot.prepend(im);
-    slot.setAttribute('data-has-photo', '');
-    const cap = slot.querySelector('figcaption');
-    if (cap) { if (SITIO.portada.pie) cap.textContent = SITIO.portada.pie; else cap.remove(); }
+  /* ---------- Monograma en capas (Estudio): se ensambla al entrar en pantalla y se separa con el puntero ---------- */
+  const plate = document.querySelector('[data-plate]');
+  if (plate) {
+    let hover = 1, enter = 1, rp = 0;
+    const sync = () => {
+      plate.style.setProperty('--sep', Math.max(hover, 1 + enter * 3.2).toFixed(3));
+      plate.style.setProperty('--scroll', enter.toFixed(3));
+    };
+    window.ARQ.tilt(plate, {
+      target: plate, max: 12,
+      onMove: (x, y) => { hover = 1 + 1.6 * Math.min(1, Math.hypot(x - 0.5, y - 0.5) * 2 + 0.35); sync(); },
+      onLeave: () => { hover = 1; sync(); }
+    });
+    const onScroll = () => {
+      cancelAnimationFrame(rp);
+      rp = requestAnimationFrame(() => {
+        if (reduce.matches) { enter = 0; sync(); return; }
+        const r = plate.getBoundingClientRect(), vh = innerHeight;
+        const prog = (vh - r.top) / (vh * 0.5 + r.height * 0.5);   // 0 al asomarse, 1 al centrarse
+        enter = Math.min(1, Math.max(0, 1 - prog));
+        sync();
+      });
+    };
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', onScroll);
+    onScroll();
   }
+
+  document.querySelectorAll('[data-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
 
   /* ---------- Estudio, alcances, correo y redes ---------- */
   const studio = document.querySelector('[data-studio]');
@@ -162,11 +228,25 @@
     if (railNav) railNav.hidden = max <= 4;
     if (prev) prev.disabled = list.scrollLeft <= 4;
     if (next) next.disabled = list.scrollLeft >= max - 4;
+    const bar = document.querySelector('[data-rail-progress]');
+    if (bar) bar.style.setProperty('--p', max > 4 ? (list.scrollLeft / max).toFixed(3) : '1');
   };
   const mover = (dir) => list.scrollBy({ left: dir * paso(), behavior: reduce.matches ? 'auto' : 'smooth' });
   prev?.addEventListener('click', () => mover(-1));
   next?.addEventListener('click', () => mover(1));
-  list.addEventListener('scroll', () => requestAnimationFrame(estado), { passive: true });
+  const coverflow = () => {
+    const box = list.getBoundingClientRect(), mid = box.left + box.width / 2;
+    list.querySelectorAll('.card').forEach((card) => {
+      if (reduce.matches) { card.style.removeProperty('--cf-r'); card.style.removeProperty('--cf-z'); return; }
+      const r = card.getBoundingClientRect();
+      const d = Math.max(-1.4, Math.min(1.4, (r.left + r.width / 2 - mid) / box.width * 1.6));
+      card.style.setProperty('--cf-r', (d * -16).toFixed(2) + 'deg');
+      card.style.setProperty('--cf-z', (Math.abs(d) * -70).toFixed(1) + 'px');
+    });
+  };
+  list.addEventListener('scroll', () => requestAnimationFrame(() => { estado(); coverflow(); }), { passive: true });
+  addEventListener('resize', coverflow);
+  requestAnimationFrame(coverflow);
   addEventListener('resize', estado);
   list.addEventListener('keydown', (e) => {
     if (e.target !== list) return;
@@ -224,8 +304,8 @@
 
   if (filtersEl && facetas.length) {
     filtersEl.innerHTML = facetas.map((f) => `<fieldset><legend>${f.label}</legend><div class="chips">` +
-      `<button class="chip" type="button" data-k="${f.k}" data-v="" aria-pressed="true">Todos</button>` +
-      f.vals.map((v) => `<button class="chip" type="button" data-k="${f.k}" data-v="${esc(v)}" aria-pressed="false">${esc(v)}</button>`).join('') +
+      `<button class="chip" type="button" data-k="${f.k}" data-v="" aria-pressed="true">Todos <span class="chip__n">${reales.length}</span></button>` +
+      f.vals.map((v) => `<button class="chip" type="button" data-k="${f.k}" data-v="${esc(v)}" aria-pressed="false">${esc(v)} <span class="chip__n">${reales.filter((p) => String(p[f.k]) === v).length}</span></button>`).join('') +
       `</div></fieldset>`).join('');
     filtersEl.hidden = false;
     filtersEl.addEventListener('click', (e) => {
