@@ -113,7 +113,7 @@
 
   /* ---------- Estudio, alcances, correo y redes ---------- */
   const studio = document.querySelector('[data-studio]');
-  if (studio && lleno(SITIO.estudio)) studio.innerHTML = SITIO.estudio.map((p, i) => `<p${i === 0 ? ' class="lead"' : ''}>${esc(p)}</p>`).join('');
+  if (studio && lleno(SITIO.estudio)) studio.innerHTML = SITIO.estudio.map((p, i) => `<p${i === 0 ? ' class="lead"' : ''}>${esc(p)}</p>`).join('') + (SITIO.firma ? `<p class="studio__sign">${esc(SITIO.firma)}</p>` : '');
   const scope = document.querySelector('[data-scope]');
   if (scope && lleno(SITIO.alcances)) scope.innerHTML = SITIO.alcances.map((a) => `<li>${esc(a)}</li>`).join('');
   const extra = document.querySelector('[data-contact-extra]');

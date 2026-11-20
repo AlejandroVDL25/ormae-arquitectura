@@ -14,7 +14,7 @@
     return;
   }
 
-  document.title = `${p.nombre} | Arquitectura estratégica`;
+  document.title = `${p.nombre} | ORMAE Arquitectura`;
   const desc = p.resumen || [p.tipo, p.ubicacion, p.anio].filter(lleno).join(', ');
   if (desc) document.querySelector('meta[name="description"]')?.setAttribute('content', `${p.nombre}: ${desc}`);
   document.querySelector('meta[property="og:title"]')?.setAttribute('content', p.nombre);

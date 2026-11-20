@@ -1,4 +1,4 @@
-# Sitio del despacho: guía de actualización
+# ORMAE | Arquitectura: guía de actualización del sitio
 
 Sitio estático (HTML, CSS y JavaScript sin dependencias de compilación). Se puede publicar tal cual en cualquier hosting estático (Netlify, Vercel, GitHub Pages, Hostinger, etc.).
 
