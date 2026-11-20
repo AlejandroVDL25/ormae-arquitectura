@@ -83,12 +83,26 @@
     const LOOP_FROM = 4.2;   // el bucle repite solo el recorrido arquitectónico
     const toggle = document.querySelector('[data-video-toggle]');
     let pausedByUser = false;
+    const POSTER = 'assets/video/portada-poster.jpg';
+    const plane = document.querySelector('[data-hero-plane]');
+    // Escala para pasar de "contener" (la intro completa, también en vertical) a "cubrir" la pantalla
+    const medir = () => {
+      const w = plane.clientWidth, h = plane.clientHeight, r = 16 / 9;
+      const cw = Math.min(w, h * r), ch = cw / r;
+      heroEl.style.setProperty('--cover', Math.max(w / cw, h / ch).toFixed(4));
+    };
+    medir(); addEventListener('resize', medir);
     const terminarIntro = () => heroEl.classList.remove('is-intro');
+    const bloqueado = () => { if (video.paused && !pausedByUser) { video.poster = POSTER; terminarIntro(); heroEl.classList.add('is-blocked'); } };
     if (reduce.matches) {
-      video.removeAttribute('autoplay'); video.pause();
+      // Movimiento reducido: el video queda visible y quieto; se reproduce solo si la persona lo pide
+      heroEl.classList.remove('is-intro');
+      video.removeAttribute('autoplay'); video.pause(); video.poster = POSTER; pausedByUser = true;
+      video.loop = true;
     } else {
       heroEl.classList.add('is-intro');
       video.loop = false;
+      video.play().catch(bloqueado);
       video.addEventListener('timeupdate', () => {
         if (video.currentTime >= INTRO_END) terminarIntro();
         if (toggle && isFinite(video.duration)) toggle.style.setProperty('--vp', (video.currentTime / video.duration).toFixed(3));
@@ -100,8 +114,8 @@
       });
       video.addEventListener('error', terminarIntro);
       video.querySelector('source:last-of-type')?.addEventListener('error', terminarIntro);
-      // Si el navegador no reproduce automáticamente (ahorro de batería, datos), el texto aparece igual
-      setTimeout(() => { if (video.paused || video.currentTime < 0.2) terminarIntro(); }, 1400);
+      // Ahorro de batería o de datos puede impedir la reproducción automática: queda la imagen y el botón
+      setTimeout(bloqueado, 1600);
       setTimeout(terminarIntro, 5000);
     }
     const sync = () => {
@@ -109,15 +123,15 @@
       if (toggle) { toggle.querySelector('.hero__toggle-label').textContent = playing ? 'Pausar video' : 'Reproducir video'; toggle.setAttribute('aria-pressed', String(!playing)); toggle.classList.toggle('is-paused', !playing); }
     };
     video.addEventListener('play', sync); video.addEventListener('pause', sync);
+    sync();
     toggle?.addEventListener('click', () => {
-      if (video.paused) { pausedByUser = false; video.play().catch(() => {}); } else { pausedByUser = true; video.pause(); }
+      if (video.paused) { pausedByUser = false; heroEl.classList.remove('is-blocked'); video.play().catch(() => {}); } else { pausedByUser = true; video.pause(); }
       terminarIntro();
     });
     // Se detiene fuera de pantalla para ahorrar batería
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(([e]) => {
-        if (reduce.matches) return;
-        if (e.isIntersecting && !pausedByUser) video.play().catch(() => {});
+        if (e.isIntersecting && !pausedByUser && !heroEl.classList.contains('is-blocked')) video.play().catch(() => {});
         else if (!e.isIntersecting) video.pause();
       }, { threshold: 0.05 }).observe(heroEl);
     }

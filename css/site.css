@@ -1,6 +1,6 @@
 /* Hallmark · shape: Index-First (draw swap from Manifesto: the prompt gives no beliefs to declare, and the work is the page) · genre: editorial · theme: Specimen (deal 2/3, seed sitio-presentaci-para-despacho-ab82·341804bb·2026-11-20·r0) · job: hire · draw: 87fbb9
  * hero: Poster, the studio's own video full-bleed as a 3D plane by request (was Stage on ink) (swap from Banner: the monogram is the strongest real thing and earns the visual) · nav: full-width bar, paper over light sections and ink over dark ones, by request · footer: statement on ink with the phone and the region · index: a horizontal carousel by request · accent: terracotta by request · services: statement without guides by request · imagery: none yet, the user's own photographs only; drafting-sheet slots until they arrive · signature: the video plane in depth; the monogram split into four exact layers (now in Estudio) over its measured construction grid; they assemble on arrival, part in depth under the pointer and on scroll · display: Jost 300 by request (geometric sans echoing the monogram), replacing the theme's Bodoni · ink areas: hero, contact, footer by request
- * axes: light/high-contrast-serif/cool · posture: restrained · contrast: pass · fold: pass · copy: verbatim for the four confirmed lines · v2.0.0 */
+ * axes: light/high-contrast-serif/cool · posture: restrained · surface: absolute (the video ground only) · contrast: pass · fold: pass · copy: verbatim for the four confirmed lines · v2.0.0 */
 /* Hallmark · pre-emit critique: P4 H5 E4 S4 R4 V4 · weakest: S, almost no material beyond the logo and four lines; answered by measuring the monogram itself (stroke 7/150) and drawing its grid as the hero, never inventing work */
 /* Hallmark · waive 81 · each empty project slot holds a ruled drafting sheet labelled Imagen por publicar · the user forbade stock photographs and asked for elegant temporary spaces until the project photos arrive */
 /* Hallmark · waive 47c · the 32px ruled grid appears only inside .sheet, inside an empty project slot · it marks where the architect's own photographs go, a placeholder by request and never decoration */
@@ -10,6 +10,7 @@
 /* Hallmark · hero-review: in-thread · 0 findings · finish-review: in-thread (no subagent requested) · 2 findings · 2 resolved (mobile menu order, footer on short pages) · gap: none */
 /* Hallmark · dismissed F4 · .hero .btn--primary is the page's one primary, its colours swapped for the ink hero */
 /* Hallmark · waive 83 · the carousel holds five project covers, all the studio's own renders and site photos from its Instagram · the work is the page for an architecture studio portfolio */
+/* Hallmark · waive 7b · --color-video-ground sits only behind the hero video, sampled from its own black frame (about 2% lightness) · the letterbox around the logo intro must vanish into the footage on a phone */
 @import url("./tokens.css");
 @import url("./base.css");
 
@@ -20,6 +21,7 @@
   --color-on-ink-muted: oklch(78% 0.016 78);
   --color-scrim: oklch(17% 0.012 60 / 0.88);
   --color-scrim-soft: oklch(17% 0.012 60 / 0.55);
+  --color-video-ground: oklch(2.5% 0.002 60);
   --nav-h: 72px;
 }
 
@@ -44,7 +46,10 @@ a:not(.btn):hover { text-decoration-thickness: 2px; }
 .nav__name { display: grid; gap: var(--space-3xs); line-height: 1; white-space: nowrap; }
 .wordmark-main { font-family: var(--font-body); font-weight: 500; font-size: var(--text-lg); letter-spacing: 0.14em; }
 .wordmark-sub { font-family: var(--font-body); font-weight: 400; font-size: 0.6875rem; letter-spacing: 0.42em; text-transform: uppercase; opacity: 0.85; }
-.nav__mark img { width: 44px; height: 44px; }
+.logo-tile { display: block; flex-shrink: 0; shape-rendering: geometricPrecision; }
+.logo-tile__ground { fill: var(--color-ink); }
+.logo-tile__mark { fill: var(--color-on-ink); }
+.nav__logo { width: 44px; height: 44px; }
 .nav__mark:focus-visible, .nav__links a:focus-visible, .nav__call:focus-visible, .nav__toggle:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 .nav__links { display: flex; gap: var(--space-xl); }
 .nav__links a { font-size: var(--text-sm); font-weight: 500; text-decoration: none; white-space: nowrap; color: inherit; opacity: 0.82; padding: var(--space-xs) 0; transition: opacity var(--dur-short) var(--ease-out); }
@@ -90,10 +95,12 @@ a:not(.btn):hover { text-decoration-thickness: 2px; }
 /* ---------- Nav controls ---------- */
 .nav { --nav-line: var(--color-rule-2); }
 .nav--clear, .nav--dark, .nav[data-open] { --nav-line: var(--color-on-ink-muted); }
-.nav__call { position: relative; display: inline-flex; align-items: center; gap: var(--space-sm); min-height: 44px; padding: 0 var(--space-md) 0 var(--space-2xs); color: inherit; border: var(--rule-hair) solid var(--nav-line); font-size: var(--text-sm); font-weight: 500; letter-spacing: 0.02em; text-decoration: none; white-space: nowrap; font-variant-numeric: tabular-nums; transition: border-color var(--dur-short) var(--ease-out); }
-.nav__call-icon { display: grid; place-items: center; width: 36px; height: 36px; background: var(--color-accent); color: var(--color-accent-ink); }
-.nav__call-icon svg { width: 16px; height: 16px; transition: transform var(--dur-long) var(--ease-out); }
-.nav__call:hover { border-color: currentColor; }
+.nav__call { position: relative; display: inline-flex; align-items: center; gap: var(--space-sm); min-height: 44px; padding: 0; color: inherit; font-size: var(--text-sm); font-weight: 500; letter-spacing: 0.02em; text-decoration: none; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.nav__call-icon { display: grid; place-items: center; width: 44px; height: 44px; background: var(--color-accent); color: var(--color-accent-ink); transition: background-color var(--dur-short) var(--ease-out); }
+.nav__call-icon svg { width: 20px; height: 20px; stroke-width: 1.6; transition: transform var(--dur-long) var(--ease-out); }
+.nav__call-label { position: relative; padding-block: var(--space-2xs); }
+.nav__call-label::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: 0 50%; transition: transform var(--dur-long) var(--ease-out); }
+.nav__call:hover .nav__call-label::after { transform: scaleX(1); }
 .nav__call:hover .nav__call-icon svg { transform: rotate(-14deg) scale(1.08); }
 .nav__call:active { transform: translateY(1px); }
 .nav__toggle { display: none; align-items: center; gap: var(--space-sm); min-height: 44px; padding: 0 var(--space-xs); background: none; border: 0; color: inherit; font-size: var(--text-sm); font-weight: 500; letter-spacing: 0.02em; cursor: pointer; }
@@ -110,7 +117,7 @@ a:not(.btn):hover { text-decoration-thickness: 2px; }
 
 @media (max-width: 48rem) {
   .nav__toggle { display: inline-flex; }
-  .nav__call { padding: 0 var(--space-2xs); }
+  .nav__bar { gap: var(--space-sm); }
   .nav__call-label { display: none; }
   .nav[data-open] { background: var(--color-ink); color: var(--color-on-ink); border-bottom-color: var(--color-ink-2); }
   .js .nav__links { display: none; }
@@ -122,6 +129,7 @@ a:not(.btn):hover { text-decoration-thickness: 2px; }
   .nav__panel-foot a { font-family: var(--font-body); font-size: var(--text-md); border: 0; padding: 0; color: var(--color-on-ink); }
   html.menu-open { overflow: clip; }
 }
+@media (max-width: 23rem) { .nav__toggle-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); } }
 @keyframes panel-in { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
 
 /* ---------- Filters: drawn as tabs on a rule ---------- */
@@ -163,6 +171,8 @@ a:not(.btn):hover { text-decoration-thickness: 2px; }
 .hero__toggle:hover { background: var(--color-ink-2); }
 .hero__toggle:active { transform: translateY(1px); }
 html:not(.js) .hero__toggle { display: none; }
+.hero.is-blocked .hero__toggle { background: var(--color-on-ink); color: var(--color-ink); border-color: var(--color-on-ink); }
+.hero.is-blocked .hero__toggle-icon { border-right-color: var(--color-paper-3); }
 
 /* ---------- Crumb ---------- */
 .crumb { display: inline-flex; align-items: center; gap: var(--space-xs); min-height: 44px; text-decoration: none; }
@@ -179,8 +189,12 @@ html:not(.js) .hero__toggle { display: none; }
 .hero.is-tilting .hero__plane { transition-duration: var(--dur-short); }
 .js .hero.is-intro .hero__plane { scale: 0.93; }
 .hero__plane { transition: transform var(--dur-long) var(--ease-out), scale 1.2s var(--ease-out); }
-.hero__video, .hero__still { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.hero__still { display: none; }
+.hero__plane { background: var(--color-video-ground); color: var(--color-on-ink); }
+.hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transform: scale(var(--cover, 1.2)); transform-origin: 50% 50%; transition: transform 1.8s var(--ease-in-out); backface-visibility: hidden; }
+.js .hero.is-intro .hero__video { transform: scale(1); }
+.js .hero.is-intro .hero__scrim { opacity: 0; }
+.hero__scrim { transition: opacity 1.4s var(--ease-out); }
+html:not(.js) .hero__video { object-fit: cover; transform: none; }
 .hero__scrim { position: absolute; inset: 0; background: linear-gradient(to top, var(--color-scrim) 0%, transparent 62%), linear-gradient(to right, var(--color-scrim-soft) 0%, transparent 70%); opacity: calc(1 - var(--intro, 0)); transition: opacity 0.9s var(--ease-out); }
 
 .hero__content { position: relative; z-index: 2; transform-style: preserve-3d; transform: translate3d(calc(var(--mx, 0) * 18px), calc(var(--my, 0) * 12px + var(--hscroll, 0) * -120px), 0); transition: transform var(--dur-long) var(--ease-out); }
@@ -284,6 +298,7 @@ html:not(.js) .hero__toggle { display: none; }
 .footer { padding-block: var(--space-3xl) var(--space-xl); background: var(--color-ink); color: var(--color-on-ink); border-top: var(--rule-hair) solid var(--color-ink-2); }
 .footer__grid { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; grid-template-areas: "mark statement contact links" "legal legal legal legal"; gap: var(--space-xl) var(--gap-columns); align-items: start; }
 .footer__mark { grid-area: mark; width: 96px; height: 96px; outline: var(--rule-hair) solid var(--color-ink-2); }
+.footer .logo-tile__ground { fill: var(--color-ink); }
 .footer__statement { grid-area: statement; font-family: var(--font-display); font-size: var(--text-3xl); line-height: 1.1; max-width: 18ch; }
 .footer__contact { grid-area: contact; display: grid; gap: var(--space-xs); font-size: var(--text-md); color: var(--color-on-ink-muted); }
 .footer__contact a { color: var(--color-on-ink); font-family: var(--font-display); font-weight: var(--display-weight); font-size: var(--text-2xl); line-height: 1.1; text-decoration: none; white-space: nowrap; }
@@ -401,7 +416,13 @@ body:has(> .project) { min-height: 100dvh; display: flex; flex-direction: column
   .actions { display: grid; grid-template-columns: minmax(0, 1fr); }
   .actions .btn, .contact__btn { width: 100%; }
   .actions .btn__label, .contact__btn .btn__label { flex: 1; }
-  .nav__name { display: none; }
+  .nav__logo { width: 38px; height: 38px; }
+  .nav__mark { gap: var(--space-xs); }
+  .wordmark-main { font-size: var(--text-md); letter-spacing: 0.12em; }
+  .wordmark-sub { letter-spacing: 0.26em; }
+  .hero__toggle { padding: 0; }
+  .hero__toggle-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .hero__toggle-icon { width: 44px; height: 44px; border-right: 0; }
   .gallery { grid-template-columns: minmax(0, 1fr); }
   .contact__phone a { font-size: clamp(2.5rem, 13vw, 4rem); }
   .footer__mark { width: 64px; height: 64px; }
@@ -412,12 +433,10 @@ body:has(> .project) { min-height: 100dvh; display: flex; flex-direction: column
 /* ---------- Reduced motion: no tilt, no settle, no reveal, no page morph ---------- */
 @media (prefers-reduced-motion: reduce) {
   .js .plate__stage { animation: none; }
-  .hero__video { display: none; }
-  .hero__still { display: block; }
+  .hero__video { transition: none; }
   .hero__plane, .hero__content, .card { transform: none !important; transition: none; }
   .js .hero.is-intro .hero__content > *, .js .hero.is-intro .hero__line { opacity: 1; transform: none; }
   .hero__scrim { opacity: 1; }
-  .hero__toggle { display: none; }
   .js [data-depth], .js .contact__phone a { animation: none; }
   .plate { --sep: 1 !important; --scroll: 0 !important; }
   .plate__stage, .card__img, .shot { transform: none !important; transition: none; }
