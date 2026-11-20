@@ -23,11 +23,16 @@ window.SITIO = {
   // DEMO: texto tomado de la publicación de presentación en Instagram (22 de marzo de 2026).
   estudio: [
     "Después de mucho tiempo trabajando y aprendiendo en distintos proyectos, decidí dar un paso importante: hoy nace ORMAE Arquitectura.",
-    "Un espacio donde el diseño no solo se ve bien, sino que se piensa, se planea y se ejecuta de manera estratégica.",
     "Creemos en una arquitectura consciente, funcional y bien resuelta desde el origen. Cada proyecto es una oportunidad para optimizar recursos, mejorar espacios y generar valor real."
   ],
+  // Frase destacada de la sección Estudio (vacía para ocultarla).
+  cita: "Un espacio donde el diseño no solo se ve bien, sino que se piensa, se planea y se ejecuta de manera estratégica.",
   // Firma bajo el texto de Estudio (vacía para ocultarla).
   firma: "Arq. Omar Rodriguez",
+
+  // Servicios: etapas del proceso del despacho, en orden. Se muestran solo si se llenan.
+  // Ejemplo: { titulo: "Nombre de la etapa", texto: "Qué incluye, en una o dos líneas." }
+  etapas: [],
 
   // Alcances del servicio (sección Servicios). Un texto corto por elemento.
   alcances: [],
@@ -52,7 +57,7 @@ window.PROYECTOS = [
     creditos: [{ rol: "Fotografía", nombre: "Nombre" }],
     imagenes: [
       // rol: "portada" | "vista general" | "exterior" | "interior" | "detalle" | "plano"
-      { src: "assets/proyectos/casa-ejemplo/portada.webp", alt: "Descripción de lo que se ve", rol: "portada", ancho: 2400, alto: 1600 }
+      { src: "assets/proyectos/casa-ejemplo/portada.webp", srcset: "assets/proyectos/casa-ejemplo/portada-720.webp 720w, assets/proyectos/casa-ejemplo/portada.webp 2400w", alt: "Descripción de lo que se ve", rol: "portada", ancho: 2400, alto: 1600 }
     ],
     // Solo si existe un panorama 360° equirectangular (proporción 2:1):
     panorama: null, // { src: "assets/proyectos/casa-ejemplo/sala-360.jpg", alt: "Panorama 360° de la sala" }
@@ -78,7 +83,7 @@ window.PROYECTOS = [
     decisiones: [],
     creditos: [{ rol: "Diseño", nombre: "ORMAE Arquitectura" }, { rol: "Cliente", nombre: "MILUPA Y ASOCIADOS" }],
     imagenes: [
-      { src: "assets/proyectos/vertical-tower/01-portada.jpg", alt: "Render exterior de una torre de vivienda de ocho niveles con fachada de celosía y balcones corridos, sobre un basamento comercial", rol: "portada", ancho: 1024, alto: 1024 }
+      { src: "assets/proyectos/vertical-tower/01-portada.webp", srcset: "assets/proyectos/vertical-tower/01-portada-720.webp 720w, assets/proyectos/vertical-tower/01-portada.webp 1024w", alt: "Render exterior de una torre de vivienda de ocho niveles con fachada de celosía y balcones corridos, sobre un basamento comercial", rol: "portada", ancho: 1024, alto: 1024 }
     ],
     panorama: null,
     secuencia: null
@@ -97,9 +102,9 @@ window.PROYECTOS = [
     decisiones: [],
     creditos: [{ rol: "Diseño", nombre: "ORMAE Arquitectura" }, { rol: "Cliente y construcción", nombre: "MILUPA Y ASOCIADOS" }],
     imagenes: [
-      { src: "assets/proyectos/arco-vitral-chicahualco/01-portada.jpg", alt: "Render del atrio cubierto por un arco-techo blanco con franja de vitral de colores, con bancas bajo la cubierta", rol: "portada", ancho: 1440, alto: 1440 },
-      { src: "assets/proyectos/arco-vitral-chicahualco/02-detalle.jpg", alt: "Detalle del vitral: una cruz al centro rodeada de paños rectangulares en amarillo, azul, verde y rojo", rol: "detalle", ancho: 1440, alto: 1440 },
-      { src: "assets/proyectos/arco-vitral-chicahualco/03-exterior.jpg", alt: "Fotografía del arco-techo construido junto a la fachada amarilla de la parroquia, con el vitral visto desde abajo", rol: "exterior", ancho: 1440, alto: 1440 }
+      { src: "assets/proyectos/arco-vitral-chicahualco/01-portada.webp", srcset: "assets/proyectos/arco-vitral-chicahualco/01-portada-720.webp 720w, assets/proyectos/arco-vitral-chicahualco/01-portada.webp 1440w", alt: "Render del atrio cubierto por un arco-techo blanco con franja de vitral de colores, con bancas bajo la cubierta", rol: "portada", ancho: 1440, alto: 1440 },
+      { src: "assets/proyectos/arco-vitral-chicahualco/02-detalle.webp", srcset: "assets/proyectos/arco-vitral-chicahualco/02-detalle-720.webp 720w, assets/proyectos/arco-vitral-chicahualco/02-detalle.webp 1440w", alt: "Detalle del vitral: una cruz al centro rodeada de paños rectangulares en amarillo, azul, verde y rojo", rol: "detalle", ancho: 1440, alto: 1440 },
+      { src: "assets/proyectos/arco-vitral-chicahualco/03-exterior.webp", srcset: "assets/proyectos/arco-vitral-chicahualco/03-exterior-720.webp 720w, assets/proyectos/arco-vitral-chicahualco/03-exterior.webp 1440w", alt: "Fotografía del arco-techo construido junto a la fachada amarilla de la parroquia, con el vitral visto desde abajo", rol: "exterior", ancho: 1440, alto: 1440 }
     ],
     panorama: null,
     secuencia: null
@@ -118,9 +123,9 @@ window.PROYECTOS = [
     decisiones: [],
     creditos: [{ rol: "Diseño", nombre: "ORMAE Arquitectura" }],
     imagenes: [
-      { src: "assets/proyectos/casa-dlc/01-portada.jpg", alt: "Terreno de Casa DLC con el trazo marcado en cal y estacas de madera, entre bardas de block", rol: "portada", ancho: 1096, alto: 1456 },
-      { src: "assets/proyectos/casa-dlc/02-detalle.jpg", alt: "Juego de planos impresos y caja con el monograma de ORMAE sobre la tierra del terreno", rol: "detalle", ancho: 1227, alto: 1628 },
-      { src: "assets/proyectos/casa-dlc/03-vista-general.jpg", alt: "Dos fotografías del inicio de obra: un trabajador nivela las estacas del trazo y otro revisa el terreno", rol: "vista general", ancho: 979, alto: 1505 }
+      { src: "assets/proyectos/casa-dlc/01-portada.webp", srcset: "assets/proyectos/casa-dlc/01-portada-720.webp 720w, assets/proyectos/casa-dlc/01-portada.webp 1096w", alt: "Terreno de Casa DLC con el trazo marcado en cal y estacas de madera, entre bardas de block", rol: "portada", ancho: 1096, alto: 1456 },
+      { src: "assets/proyectos/casa-dlc/02-detalle.webp", srcset: "assets/proyectos/casa-dlc/02-detalle-720.webp 720w, assets/proyectos/casa-dlc/02-detalle.webp 1227w", alt: "Juego de planos impresos y caja con el monograma de ORMAE sobre la tierra del terreno", rol: "detalle", ancho: 1227, alto: 1628 },
+      { src: "assets/proyectos/casa-dlc/03-vista-general.webp", srcset: "assets/proyectos/casa-dlc/03-vista-general-720.webp 720w, assets/proyectos/casa-dlc/03-vista-general.webp 979w", alt: "Dos fotografías del inicio de obra: un trabajador nivela las estacas del trazo y otro revisa el terreno", rol: "vista general", ancho: 979, alto: 1505 }
     ],
     panorama: null,
     secuencia: null
@@ -139,9 +144,9 @@ window.PROYECTOS = [
     decisiones: [],
     creditos: [{ rol: "Diseño", nombre: "ORMAE Arquitectura" }],
     imagenes: [
-      { src: "assets/proyectos/interiores-residenciales/01-portada.jpg", alt: "Render de una recámara con cama de madera, muro de tabique aparente y ventanal de piso a techo hacia un patio con vegetación", rol: "portada", ancho: 1024, alto: 1024 },
-      { src: "assets/proyectos/interiores-residenciales/02-interior.jpg", alt: "Render de una recámara principal con cabecera tapizada, tapete circular, sillón azul y lámparas colgantes", rol: "interior", ancho: 1320, alto: 869 },
-      { src: "assets/proyectos/interiores-residenciales/03-interior.jpg", alt: "Render de un baño con mueble de madera flotante, espejo redondo, lámparas colgantes y ventana en arco", rol: "interior", ancho: 1440, alto: 1920 }
+      { src: "assets/proyectos/interiores-residenciales/01-portada.webp", srcset: "assets/proyectos/interiores-residenciales/01-portada-720.webp 720w, assets/proyectos/interiores-residenciales/01-portada.webp 1024w", alt: "Render de una recámara con cama de madera, muro de tabique aparente y ventanal de piso a techo hacia un patio con vegetación", rol: "portada", ancho: 1024, alto: 1024 },
+      { src: "assets/proyectos/interiores-residenciales/02-interior.webp", srcset: "assets/proyectos/interiores-residenciales/02-interior-720.webp 720w, assets/proyectos/interiores-residenciales/02-interior.webp 1320w", alt: "Render de una recámara principal con cabecera tapizada, tapete circular, sillón azul y lámparas colgantes", rol: "interior", ancho: 1320, alto: 869 },
+      { src: "assets/proyectos/interiores-residenciales/03-interior.webp", srcset: "assets/proyectos/interiores-residenciales/03-interior-720.webp 720w, assets/proyectos/interiores-residenciales/03-interior.webp 1440w", alt: "Render de un baño con mueble de madera flotante, espejo redondo, lámparas colgantes y ventana en arco", rol: "interior", ancho: 1440, alto: 1920 }
     ],
     panorama: null,
     secuencia: null
@@ -159,7 +164,7 @@ window.PROYECTOS = [
     decisiones: [],
     creditos: [{ rol: "Diseño", nombre: "ORMAE Arquitectura" }, { rol: "Concebido para", nombre: "RO Cúbica" }],
     imagenes: [
-      { src: "assets/proyectos/cocina-ro-cubica/01-portada.jpg", alt: "Render de cocina y comedor con vigas de madera en el techo, cocina de madera clara con barra y comedor de seis sillas", rol: "portada", ancho: 1320, alto: 874 }
+      { src: "assets/proyectos/cocina-ro-cubica/01-portada.webp", srcset: "assets/proyectos/cocina-ro-cubica/01-portada-720.webp 720w, assets/proyectos/cocina-ro-cubica/01-portada.webp 1320w", alt: "Render de cocina y comedor con vigas de madera en el techo, cocina de madera clara con barra y comedor de seis sillas", rol: "portada", ancho: 1320, alto: 874 }
     ],
     panorama: null,
     secuencia: null

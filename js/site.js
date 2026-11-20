@@ -11,9 +11,9 @@
   const ROLES = { portada: 'Portada', 'vista general': 'Vista general', exterior: 'Exterior', interior: 'Interior', detalle: 'Detalle', plano: 'Plano' };
   const portadaDe = (p) => (p.imagenes || []).find((i) => i.rol === 'portada') || (p.imagenes || [])[0] || null;
   const hoja = (rol) => `<div class="sheet" role="img" aria-label="Imagen pendiente de entrega"><b>Imagen por publicar</b><span>${esc(ROLES[rol] || 'Portada')}</span></div>`;
-  const imgTag = (im, { prioridad = false, cls = '' } = {}) => {
+  const imgTag = (im, { prioridad = false, cls = '', sizes = '' } = {}) => {
     const w = im.ancho || 1600, h = im.alto || 1000;
-    return `<img ${cls ? `class="${cls}" ` : ''}src="${esc(im.src)}"${im.srcset ? ` srcset="${esc(im.srcset)}" sizes="${esc(im.sizes || '100vw')}"` : ''} width="${w}" height="${h}" alt="${esc(im.alt || '')}" decoding="async"${prioridad ? ' fetchpriority="high"' : ' loading="lazy"'}>`;
+    return `<img ${cls ? `class="${cls}" ` : ''}src="${esc(im.src)}"${im.srcset ? ` srcset="${esc(im.srcset)}" sizes="${esc(sizes || im.sizes || '100vw')}"` : ''} width="${w}" height="${h}" alt="${esc(im.alt || '')}" decoding="async"${prioridad ? ' fetchpriority="high"' : ' loading="lazy"'}>`;
   };
 
   window.ARQ = { esc, lleno, pad, ROLES, portadaDe, hoja, imgTag, reduce, finePointer };
@@ -193,18 +193,33 @@
 
   /* ---------- Estudio, alcances, correo y redes ---------- */
   const studio = document.querySelector('[data-studio]');
-  if (studio && lleno(SITIO.estudio)) studio.innerHTML = SITIO.estudio.map((p, i) => `<p${i === 0 ? ' class="lead"' : ''}>${esc(p)}</p>`).join('') + (SITIO.firma ? `<p class="studio__sign">${esc(SITIO.firma)}</p>` : '');
+  if (studio && lleno(SITIO.estudio)) {
+    const [primero, ...resto] = SITIO.estudio;
+    const ig = (SITIO.redes || []).find((r) => r && /instagram/i.test(r.url || ''));
+    studio.innerHTML = `<p class="lead">${esc(primero)}</p>`
+      + (SITIO.cita ? `<blockquote class="studio__quote"><p>${esc(SITIO.cita)}</p></blockquote>` : '')
+      + resto.map((p) => `<p>${esc(p)}</p>`).join('')
+      + (SITIO.firma ? `<p class="studio__sign">${esc(SITIO.firma)}</p>` : '')
+      + (ig ? `<p class="studio__more"><a href="${esc(ig.url)}" rel="me noopener" target="_blank">Ver el trabajo diario en Instagram</a></p>` : '');
+  }
+  // Servicios: etapas reales del despacho, cuando se capturen
+  const etapas = document.querySelector('[data-etapas]');
+  if (etapas && lleno(SITIO.etapas)) {
+    etapas.innerHTML = SITIO.etapas.map((e) => `<li><h3>${esc(e.titulo)}</h3>${e.texto ? `<p>${esc(e.texto)}</p>` : ''}</li>`).join('');
+    etapas.hidden = false;
+  }
   const scope = document.querySelector('[data-scope]');
-  if (scope && lleno(SITIO.alcances)) scope.innerHTML = SITIO.alcances.map((a) => `<li>${esc(a)}</li>`).join('');
+  if (scope && lleno(SITIO.alcances)) { scope.innerHTML = SITIO.alcances.map((a) => `<li>${esc(a)}</li>`).join(''); scope.hidden = false; }
   const extra = document.querySelector('[data-contact-extra]');
   if (extra) {
     const links = [];
     if (SITIO.correo) links.push(`<a href="mailto:${esc(SITIO.correo)}">${esc(SITIO.correo)}</a>`);
-    (SITIO.redes || []).forEach((r) => { if (r && r.url) links.push(`<a href="${esc(r.url)}" rel="me noopener" target="_blank">${esc(r.nombre || r.url)}</a>`); });
+    (SITIO.redes || []).forEach((r) => { if (r && r.url && !/instagram/i.test(r.url)) links.push(`<a href="${esc(r.url)}" rel="me noopener" target="_blank">${esc(r.nombre || r.url)}</a>`); });
     extra.innerHTML = links.join('');
   }
 
   /* ---------- Carrusel de proyectos y filtros ---------- */
+  const ARROW = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
   const list = document.querySelector('[data-index]');
   if (!list) return;
   const filtersEl = document.querySelector('[data-filters]');
@@ -217,12 +232,14 @@
     const cov = portadaDe(p);
     return `<li data-reveal style="--i:${i}" data-slug="${esc(p.slug)}"${p.pendiente ? ' class="is-pending"' : ''}>
       <a class="card" href="proyecto.html?p=${encodeURIComponent(p.slug)}">
-        <figure class="card__img" data-slot="tarjeta-${esc(p.slug)}" data-alt="Portada del proyecto, vertical 4:5">${cov ? imgTag(cov) : hoja('portada')}</figure>
+        <figure class="card__img" data-slot="tarjeta-${esc(p.slug)}" data-alt="Portada del proyecto, vertical 4:5">${cov ? imgTag(cov, { sizes: '(min-width: 60rem) 32rem, 80vw' }) : hoja('portada')}</figure>
         <span class="card__meta">
           <span class="card__num">${pad(i + 1)}</span>
           <span class="card__name">${esc(p.nombre || 'Proyecto sin nombre')}</span>
           <span class="card__info">${esc(meta)}</span>
           <span class="card__year">${lleno(p.anio) ? esc(p.anio) : ''}</span>
+          ${p.resumen ? `<span class="card__sum">${esc(p.resumen)}</span>` : ''}
+          <span class="card__go">Ver proyecto${ARROW}</span>
         </span>
       </a></li>`;
   }).join('');
@@ -337,6 +354,24 @@
     filtersEl.querySelector('.chip')?.focus();
   });
   estado();
+
+  // Servicios: los tipos de proyecto publicados, cada uno abre el portafolio ya filtrado
+  const ambitos = document.querySelector('[data-ambitos]'), ambList = document.querySelector('[data-ambitos-list]');
+  if (ambitos && ambList) {
+    const tipos = [...new Set(reales.map((p) => p.tipo).filter(lleno))];
+    if (tipos.length) {
+      ambList.innerHTML = tipos.map((tipo) => {
+        const n = reales.filter((p) => p.tipo === tipo).length;
+        return `<li><a class="ambito" href="#proyectos" data-apply-k="tipo" data-apply-v="${esc(tipo)}"><span class="ambito__name">${esc(tipo)}</span><span class="ambito__n">${n === 1 ? '1 proyecto' : n + ' proyectos'}</span>${ARROW}</a></li>`;
+      }).join('');
+      ambitos.hidden = false;
+      ambList.addEventListener('click', (e) => {
+        const a = e.target.closest('[data-apply-k]'); if (!a) return;
+        const chip = filtersEl && filtersEl.querySelector(`.chip[data-k="${a.dataset.applyK}"][data-v="${CSS.escape(a.dataset.applyV)}"]`);
+        if (chip) chip.click();
+      });
+    }
+  }
 
   // Entradas en profundidad: secciones y tarjetas
   if ('IntersectionObserver' in window) {

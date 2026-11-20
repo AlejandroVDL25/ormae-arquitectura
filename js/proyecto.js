@@ -31,7 +31,7 @@
   if (p.resumen) html.push(`<p class="lead project__summary">${esc(p.resumen)}</p>`);
 
   html.push(`<figure class="cover"><div class="cover__frame" style="view-transition-name: cover">${cov
-    ? `<button class="shot" type="button" data-open="0" aria-label="Ampliar: ${esc(cov.alt || 'portada')}">${imgTag(cov, { prioridad: true })}</button>`
+    ? `<button class="shot" type="button" data-open="0" aria-label="Ampliar: ${esc(cov.alt || 'portada')}">${imgTag(cov, { prioridad: true, sizes: '(min-width: 90rem) 1312px, 100vw' })}</button>`
     : hoja('portada')}</div></figure>`);
 
   if (p.pendiente) {
@@ -69,7 +69,7 @@
   if (resto.length) {
     html.push(`<section class="project__section" aria-labelledby="t-gal"><h2 id="t-gal">Imágenes</h2><div class="gallery">${resto.map((im, i) => {
       const ancha = (im.ancho || 16) / (im.alto || 10) >= 1.3 || im.rol === 'plano';
-      return `<figure${ancha ? ' class="is-wide"' : ''}><button class="shot" type="button" data-open="${i + (cov ? 1 : 0)}" aria-label="Ampliar: ${esc(im.alt || ROLES[im.rol] || 'imagen')}">${imgTag(im)}</button>${im.rol || im.pie ? `<figcaption>${esc(im.pie || ROLES[im.rol] || im.rol)}</figcaption>` : ''}</figure>`;
+      return `<figure${ancha ? ' class="is-wide"' : ''}><button class="shot" type="button" data-open="${i + (cov ? 1 : 0)}" aria-label="Ampliar: ${esc(im.alt || ROLES[im.rol] || 'imagen')}">${imgTag(im, { sizes: ancha ? '(min-width: 90rem) 1312px, 100vw' : '(min-width: 40rem) 50vw, 100vw' })}</button>${im.rol || im.pie ? `<figcaption>${esc(im.pie || ROLES[im.rol] || im.rol)}</figcaption>` : ''}</figure>`;
     }).join('')}</div></section>`);
   }
 
@@ -77,12 +77,19 @@
     html.push(`<section class="project__section" aria-labelledby="t-cred"><h2 id="t-cred">Créditos</h2><dl class="facts">${p.creditos.map((c) => `<div><dt>${esc(c.rol)}</dt><dd>${esc(c.nombre)}</dd></div>`).join('')}</dl></section>`);
   }
 
+  // Recorrido entre proyectos: anterior y siguiente con su portada
   if (PROYECTOS.length > 1) {
-    const sig = PROYECTOS[(idx + 1) % PROYECTOS.length];
-    html.push(`<a class="next" href="proyecto.html?p=${encodeURIComponent(sig.slug)}"><span>Siguiente proyecto</span><b>${esc(sig.nombre)}</b></a>`);
+    const ant = PROYECTOS[(idx - 1 + PROYECTOS.length) % PROYECTOS.length], sig = PROYECTOS[(idx + 1) % PROYECTOS.length];
+    const lado = (q, rel, txt) => { const c = portadaDe(q); return `<a class="pager__link pager__link--${rel}" href="proyecto.html?p=${encodeURIComponent(q.slug)}" rel="${rel}">
+        <span class="pager__thumb">${c ? imgTag(c, { sizes: '12rem' }) : ''}</span>
+        <span class="pager__text"><span class="pager__dir">${txt}</span><b>${esc(q.nombre)}</b>${q.tipo ? `<span class="pager__meta">${esc(q.tipo)}</span>` : ''}</span></a>`; };
+    html.push(`<nav class="pager" aria-label="Otros proyectos">${lado(ant, 'prev', 'Proyecto anterior')}${lado(sig, 'next', 'Proyecto siguiente')}</nav>`);
   }
 
   root.innerHTML = html.join('');
+  // Invitación a conversar al cierre de cada proyecto
+  const cta = document.querySelector('[data-project-cta]');
+  if (cta) cta.hidden = false;
   root.querySelectorAll('.shot').forEach(tilt);
 
   /* ---------- Ampliación de imágenes ---------- */

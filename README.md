@@ -18,7 +18,7 @@ Sitio estático (HTML, CSS y JavaScript sin dependencias de compilación). Se pu
 ## Publicar un proyecto
 
 1. Crea la carpeta `assets/proyectos/<slug>/` (ejemplo: `casa-metepec`).
-2. Exporta las fotos en **WebP o JPG, 2400 px en el lado largo**, calidad 75 a 82. Sin recortar: el sitio respeta la proporción original.
+2. Exporta cada foto en **WebP** en dos tamaños, sin recortar: `nombre.webp` (1440 a 2400 px en el lado largo, calidad 80) y `nombre-720.webp` (720 px de ancho). El celular descarga la de 720 y la computadora la grande (campo `srcset`).
 3. En `data/proyectos.js`, copia la plantilla comentada, llénala y **borra los tres proyectos con `pendiente: true`**.
 4. Indica en cada imagen su función con `rol`: `portada`, `vista general`, `exterior`, `interior`, `detalle` o `plano`, además de `ancho` y `alto` reales en píxeles (evita saltos de diseño) y un `alt` que describa lo que se ve.
 
@@ -29,6 +29,18 @@ Cualquier campo vacío no se muestra. Los filtros por tipo, ubicación y año ap
 - **Panorama 360°**: imagen equirectangular 2:1 (por ejemplo 6000 x 3000) en `panorama: { src, alt }`. Se explora arrastrando, con el dedo o con las flechas.
 - **Secuencia de giro**: de 24 a 72 fotos consecutivas tomadas alrededor de una maqueta u objeto, mismo encuadre, en `secuencia: { alt, ancho, alto, frames: [...] }`. Se gira arrastrando, con las flechas o con el control deslizante.
 - Con fotografías normales no se simula una rotación: solo hay una inclinación discreta al pasar el puntero (se desactiva en pantallas táctiles y con "reducir movimiento").
+
+## Textos del despacho y servicios
+
+En `window.SITIO` (`data/proyectos.js`):
+
+- `estudio`: párrafos de la sección Estudio. El primero se muestra como entrada.
+- `cita`: frase destacada en grande dentro de Estudio.
+- `firma`: nombre bajo el texto.
+- `etapas`: etapas reales del servicio, en orden, como `{ titulo, texto }`. Se muestran numeradas en Servicios solo si se llenan.
+- `alcances`: lista corta de alcances del servicio. Se muestra solo si se llena.
+
+La lista «Proyectos por tipo» de Servicios se arma sola con los tipos de los proyectos publicados, y cada tipo abre el portafolio ya filtrado.
 
 ## Video de la portada
 
