@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arquitectura estratégica | Valle de Toluca, CDMX y Edo. Méx.</title>
+  <meta name="description" content="Arquitectura estratégica: planeación y desarrollo de proyectos en Valle de Toluca, CDMX y Edo. Méx. Número de contacto: 729 331 8801.">
+  <meta name="theme-color" content="#1c1814">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:title" content="Arquitectura estratégica">
+  <meta property="og:description" content="Planeación y desarrollo de proyectos. Valle de Toluca | CDMX | Edo. Méx.">
+  <meta property="og:image" content="assets/brand/logo-600.png">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/brand/favicon-64.png">
+  <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300&family=Geist:wght@400;500&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+  <a class="skip" href="#main">Saltar al contenido</a>
+
+  <header class="nav" data-nav>
+    <div class="nav__bar">
+      <a class="nav__mark" href="index.html" aria-label="Inicio">
+        <img src="assets/brand/logo-600.png" width="40" height="40" alt="">
+      </a>
+      <nav class="nav__links" id="menu" aria-label="Principal">
+        <a href="#proyectos">Proyectos</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#estudio">Estudio</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <a class="nav__call" href="tel:7293318801">Llamar</a>
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>Menú</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- INICIO -->
+    <section class="hero" aria-labelledby="hero-title" data-hero data-dark>
+      <div class="container hero__grid">
+        <div class="hero__text">
+          <h1 id="hero-title">Arquitectura estratégica</h1>
+          <p class="lead">Despacho de arquitectura en Valle de Toluca, CDMX y Edo.&nbsp;Méx.</p>
+          <div class="actions">
+            <a class="btn btn--primary" href="#proyectos">Ver proyectos</a>
+            <a class="btn btn--secondary" href="#contacto">Contacto</a>
+          </div>
+        </div>
+
+        <figure class="hero__visual" data-slot="portada" data-alt="Fotografía protagonista de un proyecto del despacho, horizontal, 2400 px o más">
+          <div class="plate" data-plate>
+            <div class="plate__stage">
+              <div class="plate__square">
+                <span class="guide guide--h" style="--at: 18%"></span>
+                <span class="guide guide--h" style="--at: 55.33%"></span>
+                <span class="guide guide--h" style="--at: 58.67%"></span>
+                <span class="guide guide--h" style="--at: 82%"></span>
+                <span class="guide guide--v" style="--at: 18%"></span>
+                <span class="guide guide--v" style="--at: 64%"></span>
+                <span class="guide guide--v" style="--at: 83.33%"></span>
+                <div class="plate__mark" role="img" aria-label="Monograma del despacho: rectángulos blancos ensamblados como una planta arquitectónica">
+                  <img class="plate__layer" style="--z: 30" src="assets/brand/capa-marco.png" width="1200" height="1200" alt="" fetchpriority="high">
+                  <img class="plate__layer" style="--z: 55" src="assets/brand/capa-barra.png" width="1200" height="1200" alt="" fetchpriority="high">
+                  <img class="plate__layer" style="--z: 80" src="assets/brand/capa-d.png" width="1200" height="1200" alt="" fetchpriority="high">
+                  <img class="plate__layer" style="--z: 110" src="assets/brand/capa-j.png" width="1200" height="1200" alt="" fetchpriority="high">
+                </div>
+              </div>
+            </div>
+          </div>
+          <figcaption class="caption" data-keep>El monograma sobre su retícula de construcción.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- PROYECTOS -->
+    <section class="work" id="proyectos" aria-labelledby="work-title">
+      <div class="container">
+        <div class="work__head" data-reveal>
+          <h2 id="work-title">Proyectos</h2>
+          <p class="lead" data-work-count>Obra del despacho, en planeación, desarrollo y construcción.</p>
+        </div>
+
+        <div class="work__bar">
+          <div class="filters" data-filters hidden></div>
+          <div class="rail-nav" data-rail-nav hidden>
+            <button class="rail-btn" type="button" data-rail-prev aria-controls="carrusel">Anterior</button>
+            <button class="rail-btn" type="button" data-rail-next aria-controls="carrusel">Siguiente</button>
+          </div>
+        </div>
+        <p class="visually-hidden" aria-live="polite" data-filter-status></p>
+      </div>
+      <ol class="rail" id="carrusel" data-index tabindex="0" aria-label="Proyectos. Deslice, arrastre o use las flechas del teclado para recorrerlos.">
+        <noscript>
+          <li class="rail__empty">El portafolio necesita JavaScript activo. Mientras tanto, puede llamar al <a href="tel:7293318801">729 331 8801</a>.</li>
+        </noscript>
+      </ol>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section class="services" id="servicios" aria-labelledby="services-title">
+      <div class="container">
+        <h2 id="services-title" class="statement" data-reveal>Planeación y desarrollo de proyectos</h2>
+        <ul class="scope" data-scope data-reveal style="--i: 2">
+          <li><span class="fill" data-fill="alcances">Alcances y etapas del servicio por confirmar</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ESTUDIO -->
+    <section class="studio" id="estudio" aria-labelledby="studio-title">
+      <div class="container studio__grid" data-reveal>
+        <h2 id="studio-title">El despacho</h2>
+        <div class="studio__body" data-studio>
+          <p class="lead"><span class="fill" data-fill="estudio">Presentación del despacho y su enfoque, por entregar</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section class="contact" id="contacto" aria-labelledby="contact-title" data-dark>
+      <div class="container">
+        <h2 id="contact-title" data-reveal>Hablemos de su proyecto</h2>
+        <div class="contact__rows" data-reveal style="--i: 2">
+          <p class="contact__phone">Número de contacto: <a href="tel:7293318801">729 331 8801</a></p>
+          <p class="contact__area">Valle de Toluca | CDMX | Edo. Méx.</p>
+          <div class="contact__extra" data-contact-extra></div>
+          <a class="btn btn--secondary contact__btn" href="tel:7293318801">Llamar ahora</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" data-dark>
+    <div class="container footer__grid">
+      <img class="footer__mark" src="assets/brand/logo-600.png" width="96" height="96" alt="Logotipo del despacho">
+      <p class="footer__statement">Planeación y desarrollo de proyectos.</p>
+      <div class="footer__contact">
+        <a href="tel:7293318801">729 331 8801</a>
+        <span>Valle de Toluca | CDMX | Edo. Méx.</span>
+      </div>
+      <nav class="footer__links" aria-label="Pie de página">
+        <a href="#proyectos">Proyectos</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#estudio">Estudio</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <p class="footer__legal"><small>© <span data-year>2026</span>. Arquitectura estratégica.</small></p>
+    </div>
+  </footer>
+
+  <script src="data/proyectos.js"></script>
+  <script src="js/site.js"></script>
+</body>
+</html>

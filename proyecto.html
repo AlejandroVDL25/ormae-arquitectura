@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Proyecto | Arquitectura estratégica</title>
+  <meta name="description" content="Proyecto de arquitectura estratégica: planeación y desarrollo de proyectos en Valle de Toluca, CDMX y Edo. Méx.">
+  <meta name="theme-color" content="#1c1814">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:title" content="Arquitectura estratégica">
+  <meta property="og:image" content="assets/brand/logo-600.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/brand/favicon-64.png">
+  <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300&family=Geist:wght@400;500&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+  <a class="skip" href="#main">Saltar al contenido</a>
+
+  <header class="nav" data-nav>
+    <div class="nav__bar">
+      <a class="nav__mark" href="index.html" aria-label="Inicio">
+        <img src="assets/brand/logo-600.png" width="40" height="40" alt="">
+      </a>
+      <nav class="nav__links" id="menu" aria-label="Principal">
+        <a href="index.html#proyectos">Proyectos</a>
+        <a href="index.html#servicios">Servicios</a>
+        <a href="index.html#estudio">Estudio</a>
+        <a href="index.html#contacto">Contacto</a>
+      </nav>
+      <a class="nav__call" href="tel:7293318801">Llamar</a>
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>Menú</button>
+    </div>
+  </header>
+
+  <main id="main" class="project">
+    <div class="container" data-project>
+      <a class="crumb" href="index.html#proyectos">Volver a proyectos</a>
+      <noscript><p class="notice">Esta página necesita JavaScript para mostrar el proyecto. Número de contacto: <a href="tel:7293318801">729 331 8801</a>.</p></noscript>
+    </div>
+  </main>
+
+  <dialog class="lightbox" aria-label="Imagen ampliada" data-lightbox>
+    <div class="lightbox__inner">
+      <div class="lightbox__top">
+        <span data-lb-count></span>
+        <button class="viewer__btn" type="button" data-lb-close>Cerrar</button>
+      </div>
+      <div class="lightbox__img" data-lb-img></div>
+      <div class="lightbox__nav">
+        <button class="viewer__btn" type="button" data-lb-prev>Anterior</button>
+        <button class="viewer__btn" type="button" data-lb-next>Siguiente</button>
+      </div>
+    </div>
+  </dialog>
+
+  <footer class="footer" data-dark>
+    <div class="container footer__grid">
+      <img class="footer__mark" src="assets/brand/logo-600.png" width="96" height="96" alt="Logotipo del despacho">
+      <p class="footer__statement">Planeación y desarrollo de proyectos.</p>
+      <div class="footer__contact">
+        <a href="tel:7293318801">729 331 8801</a>
+        <span>Valle de Toluca | CDMX | Edo. Méx.</span>
+      </div>
+      <nav class="footer__links" aria-label="Pie de página">
+        <a href="index.html#proyectos">Proyectos</a>
+        <a href="index.html#servicios">Servicios</a>
+        <a href="index.html#estudio">Estudio</a>
+        <a href="index.html#contacto">Contacto</a>
+      </nav>
+      <p class="footer__legal"><small>© <span data-year>2026</span>. Arquitectura estratégica.</small></p>
+    </div>
+  </footer>
+
+  <script src="data/proyectos.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/proyecto.js"></script>
+</body>
+</html>
