@@ -72,8 +72,14 @@
           <a class="btn btn--secondary" href="#contacto" data-dir="down"><span class="btn__label">Contacto</span><span class="btn__icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></span></a>
         </div>
       </div>
-      <button class="hero__toggle" type="button" data-video-toggle aria-pressed="false"><span class="hero__toggle-icon"><svg class="ic-pause" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg><svg class="ic-play" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg></span><span class="hero__toggle-label">Pausar video</span></button>
-      <p class="visually-hidden">Video de fondo: presentación del monograma de ORMAE y recorrido por un interior de concreto y vidrio con luz natural.</p>
+      <div class="hero__controls">
+        <p class="hero__label" data-shot-label aria-live="polite" hidden></p>
+        <div class="hero__keys">
+          <div class="shots" data-shots role="group" aria-label="Tomas del video" hidden></div>
+          <button class="hero__toggle" type="button" data-video-toggle aria-pressed="false"><span class="hero__toggle-icon"><svg class="ic-pause" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg><svg class="ic-play" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg></span><span class="hero__toggle-label">Pausar video</span></button>
+        </div>
+      </div>
+      <p class="visually-hidden">Video de fondo: presentación del monograma de ORMAE, recorrido por un interior de concreto y vidrio con luz natural y tomas animadas de renders de proyectos del despacho.</p>
     </section>
 
     <!-- PROYECTOS -->

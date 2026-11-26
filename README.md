@@ -42,6 +42,16 @@ En `window.SITIO` (`data/proyectos.js`):
 
 La lista «Proyectos por tipo» de Servicios se arma sola con los tipos de los proyectos publicados, y cada tipo abre el portafolio ya filtrado.
 
+## Tomas de render del hero
+
+Después de la intro del logotipo y del recorrido, el hero encadena las tomas de `SITIO.tomas` (`data/proyectos.js`) con un fundido cruzado y un leve empuje de cámara. Un índice de marcas finas, junto al botón de pausa, permite saltar a cualquier toma, y un rótulo enlaza al proyecto de cada render.
+
+- Archivos en `assets/video/tomas/`: `id.webm`, `id.mp4`, `id.jpg` (horizontal 16:9) y `id-v.webm`, `id-v.mp4`, `id-v.jpg` (vertical 9:16, para celular).
+- Duración de 8 a 10 s, sin audio, un fotograma clave por segundo, menos de 2,5 MB la horizontal y 1,5 MB la vertical.
+- `conceptual: true` muestra «Render conceptual», obligatorio para imágenes generadas con IA, que no son obra del despacho.
+- Las tomas actuales se hicieron con movimiento de cámara sobre los renders de los proyectos publicados. Para sustituirlas por renders animados nuevos, usa `prompts/prompt-maestro-hero.md`.
+- Deja `tomas: []` para usar solo el video principal.
+
 ## Video de la portada
 
 La portada usa `assets/video/portada.webm`, `portada.mp4` y `portada-movil.mp4` (con `portada-intro.jpg` y `portada-poster.jpg` como imágenes fijas). Los primeros 3,6 s son la intro del logotipo: se ven una vez y después el video repite solo el recorrido desde el segundo 4,2 (valores `INTRO_END` y `LOOP_FROM` en `js/site.js`). Para cambiar el video, reemplaza los archivos conservando los nombres; codifícalos con un fotograma clave por segundo para que el bucle salte sin cortes. Con "reducir movimiento" se muestra la imagen fija.

@@ -75,64 +75,157 @@
   };
   document.querySelectorAll('[data-tilt]').forEach((el) => window.ARQ.tilt(el));
 
-  /* ---------- Portada en video: intro del logotipo, bucle del recorrido y plano en 3D ---------- */
+  /* ---------- Portada en video: intro del logotipo y secuencia de tomas de render, en un plano 3D ---------- */
   const heroEl = document.querySelector('[data-hero]');
-  const video = document.querySelector('[data-hero-video]');
-  if (heroEl && video) {
-    const INTRO_END = 3.6;   // segundos de la intro del logotipo dentro del video
-    const LOOP_FROM = 4.2;   // el bucle repite solo el recorrido arquitectónico
-    const toggle = document.querySelector('[data-video-toggle]');
-    let pausedByUser = false;
+  const vidA = document.querySelector('[data-hero-video]');
+  if (heroEl && vidA) {
+    const INTRO_END = 3.6;   // segundos de la intro del logotipo dentro del video principal
+    const LOOP_FROM = 4.2;   // al volver al video principal se retoma desde el recorrido
+    const FADE_AT = 1.0;     // segundos antes del final en que empieza el fundido a la siguiente toma
+    const PREP_AT = 3.0;     // segundos antes del final en que se precarga la siguiente toma
     const POSTER = 'assets/video/portada-poster.jpg';
+    const toggle = document.querySelector('[data-video-toggle]');
     const plane = document.querySelector('[data-hero-plane]');
-    // Escala para pasar de "contener" (la intro completa, también en vertical) a "cubrir" la pantalla
-    const medir = () => {
-      const w = plane.clientWidth, h = plane.clientHeight, r = 16 / 9;
-      const cw = Math.min(w, h * r), ch = cw / r;
-      heroEl.style.setProperty('--cover', Math.max(w / cw, h / ch).toFixed(4));
+    const shotsEl = document.querySelector('[data-shots]');
+    const labelEl = document.querySelector('[data-shot-label]');
+    const vertical = matchMedia('(max-width: 48rem) and (orientation: portrait)');
+    const webm = !!vidA.canPlayType && vidA.canPlayType('video/webm; codecs="vp9"') === 'probably';
+    const PORTADA = webm ? 'assets/video/portada.webm' : 'assets/video/portada.mp4';
+
+    // Segundo elemento de video para el fundido cruzado entre tomas
+    const vidB = vidA.cloneNode(false);
+    vidB.removeAttribute('autoplay'); vidB.removeAttribute('poster'); vidB.removeAttribute('data-hero-video');
+    vidB.preload = 'none'; vidB.loop = false;
+    plane.appendChild(vidB);
+    vidA.classList.add('is-active');
+
+    const tomas = (SITIO.tomas || []).filter((t) => t && (t.mp4 || t.webm));
+    const seq = [{ main: true, titulo: 'Recorrido' }, ...tomas];
+    const urlDe = (t) => {
+      if (t.main) return null;
+      const v = vertical.matches && (t.mp4Vertical || t.webmVertical);
+      if (v) return webm && t.webmVertical ? t.webmVertical : (t.mp4Vertical || t.webmVertical);
+      return webm && t.webm ? t.webm : (t.mp4 || t.webm);
     };
-    medir(); addEventListener('resize', medir);
-    const terminarIntro = () => heroEl.classList.remove('is-intro');
-    const bloqueado = () => { if (video.paused && !pausedByUser) { video.poster = POSTER; terminarIntro(); heroEl.classList.add('is-blocked'); } };
+    const posterDe = (t) => (t.main ? POSTER : (vertical.matches && t.posterVertical) || t.poster || '');
+
+    let active = vidA, cur = 0, pausedByUser = false, intro = true, prepared = -1, fading = false;
+
+    // Escala de "contener" (intro completa) a "cubrir" la pantalla, por la proporción de cada video
+    const medir = (el) => {
+      const w = plane.clientWidth, h = plane.clientHeight;
+      const r = el.videoWidth && el.videoHeight ? el.videoWidth / el.videoHeight : 16 / 9;
+      const cw = Math.min(w, h * r), ch = cw / r;
+      el.style.setProperty('--cover', Math.max(w / cw, h / ch).toFixed(4));
+    };
+    [vidA, vidB].forEach((el) => el.addEventListener('loadedmetadata', () => medir(el)));
+    medir(vidA);
+    addEventListener('resize', () => { medir(vidA); medir(vidB); });
+
+    const terminarIntro = () => { intro = false; heroEl.classList.remove('is-intro'); };
+    const bloqueado = () => { if (active.paused && !pausedByUser) { active.poster = posterDe(seq[cur]); terminarIntro(); heroEl.classList.add('is-blocked'); } };
+
+    // Rótulo honesto de cada toma y marcas del índice
+    const pintar = () => {
+      const t = seq[cur];
+      if (labelEl) {
+        if (t.main) { labelEl.hidden = true; labelEl.textContent = ''; }
+        else {
+          const nombre = esc(t.titulo || '');
+          const tipo = t.conceptual ? 'Render conceptual' : 'Render del proyecto';
+          labelEl.innerHTML = t.proyecto ? `${tipo} <a href="proyecto.html?p=${encodeURIComponent(t.proyecto)}">${nombre}</a>` : `${tipo} ${nombre}`;
+          labelEl.hidden = false;
+        }
+      }
+      shotsEl?.querySelectorAll('.shot-key').forEach((b, i) => { b.classList.toggle('is-active', i === cur); b.setAttribute('aria-current', i === cur ? 'true' : 'false'); });
+    };
+    if (shotsEl && seq.length > 1) {
+      shotsEl.innerHTML = seq.map((t, i) => `<button class="shot-key" type="button" data-shot="${i}" aria-label="Ver toma ${i + 1}: ${esc(t.titulo || '')}"><span class="shot-key__bar"></span></button>`).join('');
+      shotsEl.hidden = false;
+      shotsEl.addEventListener('click', (e) => {
+        const b = e.target.closest('[data-shot]'); if (!b) return;
+        const i = Number(b.dataset.shot); if (i === cur && !active.paused) return;
+        pausedByUser = false; heroEl.classList.remove('is-blocked'); terminarIntro();
+        ir(i, { play: !reduce.matches });
+      });
+    }
+
+    const preparar = (i) => {
+      const t = seq[i], el = active === vidA ? vidB : vidA;
+      if (prepared === i) return el;
+      prepared = i;
+      el.src = t.main ? PORTADA : urlDe(t);
+      el.poster = posterDe(t);
+      el.preload = 'auto'; el.load();
+      return el;
+    };
+
+    // Cambia a la toma i con fundido cruzado y un leve empuje de cámara
+    const ir = (i, { play = true } = {}) => {
+      if (fading) return;
+      const next = preparar(i), prev = active, t = seq[i];
+      fading = true;
+      const arrancar = () => {
+        if (t.main && next.currentTime < LOOP_FROM) next.currentTime = LOOP_FROM;
+        const mostrar = () => {
+          next.classList.remove('is-push'); void next.offsetWidth;
+          if (!reduce.matches) next.classList.add('is-push');
+          next.classList.add('is-active'); prev.classList.remove('is-active');
+          active = next; cur = i; prepared = -1; pintar(); sync();
+          setTimeout(() => { prev.pause(); fading = false; }, 950);
+        };
+        if (play) next.play().then(mostrar).catch(() => { mostrar(); bloqueado(); });
+        else mostrar();
+      };
+      if (next.readyState >= 1) arrancar(); else next.addEventListener('loadedmetadata', arrancar, { once: true });
+    };
+
+    const siguiente = () => (cur + 1) % seq.length;
+    const alAvanzar = (el) => {
+      if (el !== active || !isFinite(el.duration)) return;
+      if (toggle) toggle.style.setProperty('--vp', (el.currentTime / el.duration).toFixed(3));
+      shotsEl?.querySelector('.shot-key.is-active')?.style.setProperty('--sp', (el.currentTime / el.duration).toFixed(3));
+      if (intro && el.currentTime >= INTRO_END) terminarIntro();
+      const resta = el.duration - el.currentTime;
+      if (seq.length === 1) { if (resta <= 0.35) el.currentTime = LOOP_FROM; return; }
+      if (resta <= PREP_AT) preparar(siguiente());
+      if (resta <= FADE_AT && !fading && !pausedByUser) ir(siguiente());
+    };
+    [vidA, vidB].forEach((el) => {
+      el.addEventListener('timeupdate', () => alAvanzar(el));
+      el.addEventListener('ended', () => { if (el !== active) return; if (seq.length === 1) { el.currentTime = LOOP_FROM; el.play().catch(() => {}); } else if (!fading) ir(siguiente()); });
+      el.addEventListener('play', () => { if (el === active) sync(); });
+      el.addEventListener('pause', () => { if (el === active) sync(); });
+    });
+
     if (reduce.matches) {
-      // Movimiento reducido: el video queda visible y quieto; se reproduce solo si la persona lo pide
-      heroEl.classList.remove('is-intro');
-      video.removeAttribute('autoplay'); video.pause(); video.poster = POSTER; pausedByUser = true;
-      video.loop = true;
+      // Movimiento reducido: quieto, con imagen fija; se reproduce solo si la persona lo pide
+      terminarIntro();
+      vidA.removeAttribute('autoplay'); vidA.pause(); vidA.poster = POSTER; pausedByUser = true;
     } else {
       heroEl.classList.add('is-intro');
-      video.loop = false;
-      video.play().catch(bloqueado);
-      video.addEventListener('timeupdate', () => {
-        if (video.currentTime >= INTRO_END) terminarIntro();
-        if (toggle && isFinite(video.duration)) toggle.style.setProperty('--vp', (video.currentTime / video.duration).toFixed(3));
-        if (isFinite(video.duration) && video.currentTime >= video.duration - 0.35) video.currentTime = LOOP_FROM;
-      });
-      video.addEventListener('ended', () => {
-        video.addEventListener('seeked', () => video.play().catch(() => {}), { once: true });
-        video.currentTime = LOOP_FROM;
-      });
-      video.addEventListener('error', terminarIntro);
-      video.querySelector('source:last-of-type')?.addEventListener('error', terminarIntro);
-      // Ahorro de batería o de datos puede impedir la reproducción automática: queda la imagen y el botón
+      vidA.loop = false;
+      vidA.play().catch(bloqueado);
+      vidA.addEventListener('error', terminarIntro);
+      vidA.querySelector('source:last-of-type')?.addEventListener('error', terminarIntro);
       setTimeout(bloqueado, 1600);
       setTimeout(terminarIntro, 5000);
     }
-    const sync = () => {
-      const playing = !video.paused;
+
+    function sync() {
+      const playing = !active.paused;
       if (toggle) { toggle.querySelector('.hero__toggle-label').textContent = playing ? 'Pausar video' : 'Reproducir video'; toggle.setAttribute('aria-pressed', String(!playing)); toggle.classList.toggle('is-paused', !playing); }
-    };
-    video.addEventListener('play', sync); video.addEventListener('pause', sync);
-    sync();
+    }
+    pintar(); sync();
     toggle?.addEventListener('click', () => {
-      if (video.paused) { pausedByUser = false; heroEl.classList.remove('is-blocked'); video.play().catch(() => {}); } else { pausedByUser = true; video.pause(); }
+      if (active.paused) { pausedByUser = false; heroEl.classList.remove('is-blocked'); active.play().catch(() => {}); } else { pausedByUser = true; active.pause(); }
       terminarIntro();
     });
     // Se detiene fuera de pantalla para ahorrar batería
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(([e]) => {
-        if (e.isIntersecting && !pausedByUser && !heroEl.classList.contains('is-blocked')) video.play().catch(() => {});
-        else if (!e.isIntersecting) video.pause();
+        if (e.isIntersecting && !pausedByUser && !heroEl.classList.contains('is-blocked')) active.play().catch(() => {});
+        else if (!e.isIntersecting) active.pause();
       }, { threshold: 0.05 }).observe(heroEl);
     }
     // Puntero: el plano del video y el texto se desplazan en capas distintas

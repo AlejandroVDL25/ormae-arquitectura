@@ -37,6 +37,28 @@ window.SITIO = {
   // Alcances del servicio (sección Servicios). Un texto corto por elemento.
   alcances: [],
 
+  // Tomas del hero: se encadenan después de la intro y el recorrido del video principal.
+  // Cada toma: 8 a 10 s, versión horizontal 16:9 y vertical 9:16, WebM y MP4, póster JPG.
+  // "conceptual: true" muestra el rótulo "Render conceptual" (para imágenes generadas, que no son obra del despacho).
+  // "proyecto" enlaza el rótulo a la página del proyecto. Deja el arreglo vacío para usar solo el video principal.
+  tomas: [
+    { id: "vertical-tower", titulo: "Vertical Tower", proyecto: "vertical-tower", conceptual: false,
+      webm: "assets/video/tomas/vertical-tower.webm", mp4: "assets/video/tomas/vertical-tower.mp4", poster: "assets/video/tomas/vertical-tower.jpg",
+      webmVertical: "assets/video/tomas/vertical-tower-v.webm", mp4Vertical: "assets/video/tomas/vertical-tower-v.mp4", posterVertical: "assets/video/tomas/vertical-tower-v.jpg" },
+    { id: "interiores-patio", titulo: "Interiores residenciales", proyecto: "interiores-residenciales", conceptual: false,
+      webm: "assets/video/tomas/interiores-patio.webm", mp4: "assets/video/tomas/interiores-patio.mp4", poster: "assets/video/tomas/interiores-patio.jpg",
+      webmVertical: "assets/video/tomas/interiores-patio-v.webm", mp4Vertical: "assets/video/tomas/interiores-patio-v.mp4", posterVertical: "assets/video/tomas/interiores-patio-v.jpg" },
+    { id: "cocina-ro-cubica", titulo: "Cocina y comedor RO Cúbica", proyecto: "cocina-ro-cubica", conceptual: false,
+      webm: "assets/video/tomas/cocina-ro-cubica.webm", mp4: "assets/video/tomas/cocina-ro-cubica.mp4", poster: "assets/video/tomas/cocina-ro-cubica.jpg",
+      webmVertical: "assets/video/tomas/cocina-ro-cubica-v.webm", mp4Vertical: "assets/video/tomas/cocina-ro-cubica-v.mp4", posterVertical: "assets/video/tomas/cocina-ro-cubica-v.jpg" },
+    { id: "recamara-principal", titulo: "Interiores residenciales", proyecto: "interiores-residenciales", conceptual: false,
+      webm: "assets/video/tomas/recamara-principal.webm", mp4: "assets/video/tomas/recamara-principal.mp4", poster: "assets/video/tomas/recamara-principal.jpg",
+      webmVertical: "assets/video/tomas/recamara-principal-v.webm", mp4Vertical: "assets/video/tomas/recamara-principal-v.mp4", posterVertical: "assets/video/tomas/recamara-principal-v.jpg" },
+    { id: "bano", titulo: "Interiores residenciales", proyecto: "interiores-residenciales", conceptual: false,
+      webm: "assets/video/tomas/bano.webm", mp4: "assets/video/tomas/bano.mp4", poster: "assets/video/tomas/bano.jpg",
+      webmVertical: "assets/video/tomas/bano-v.webm", mp4Vertical: "assets/video/tomas/bano-v.mp4", posterVertical: "assets/video/tomas/bano-v.jpg" }
+  ],
+
   // Correo y redes: se muestran solo si se llenan.
   correo: "",
   redes: [{ nombre: "Instagram @ormae_arquitectura", url: "https://www.instagram.com/ormae_arquitectura/" }]
